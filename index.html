@@ -3,1220 +3,494 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"/>
-  <meta name="theme-color" content="#080808"/>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" sizes="48x48"/>
-  <title>Lapidados Club - Nutricionista</title>
+  <meta name="theme-color" content="#0C0B09"/>
+  <title>Leonardo Campelo · Nutricionista</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+
   <style>
-    /* ─── TOKENS ─── */
     :root {
-      --o:   #FF5C1A;
-      --o2:  #FF3D00;
-      --og:  rgba(255,92,26,.18);
-      --og2: rgba(255,92,26,.08);
-      --bg:  #080808;
-      --s1:  #111111;
-      --s2:  #191919;
-      --s3:  #222222;
-      --br:  rgba(255,255,255,.07);
-      --br2: rgba(255,92,26,.25);
-      --t1:  #F2F2F2;
-      --t2:  #999;
-      --t3:  #555;
-      --green: #22c55e;
-      --r: 16px;
+      --bg:      #0C0B09;
+      --bg2:     #141210;
+      --bg3:     #1C1A16;
+      --border:  rgba(255,255,255,.07);
+      --border2: rgba(220,150,60,.2);
+      --o:       #E8692A;
+      --o-glow:  rgba(232,105,42,.13);
+      --o-dim:   rgba(232,105,42,.07);
+      --t1:      #F0EDE8;
+      --t2:      #8A8580;
+      --t3:      #4A4740;
+      --gold:    #C9996A;
     }
 
-    /* ─── RESET ─── */
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-    html { scroll-behavior:smooth; }
+    *, *::before, *::after {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
-      font-family:'Barlow',sans-serif;
-      background:var(--bg);
-      color:var(--t1);
-      min-height:100vh;
-      overflow-x:hidden;
-      padding-bottom:calc(90px + env(safe-area-inset-bottom, 0px)); /* space for sticky btn */
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--t1);
+      min-height: 100dvh;
+      overflow-x: hidden;
     }
 
-    /* ─── NOISE + GLOW BG ─── */
+    /* atmosphere */
     body::before {
-      content:'';
-      position:fixed; inset:0; z-index:0;
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(ellipse 70% 45% at 50% 0%, rgba(255,92,26,.13) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 25% at 90% 85%, rgba(255,61,0,.07) 0%, transparent 55%);
-      pointer-events:none;
+        radial-gradient(ellipse 75% 45% at 50% -5%, rgba(232,105,42,.10) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 25% at 80% 85%, rgba(200,80,20,.05) 0%, transparent 55%);
     }
-    /* grain */
+
     body::after {
-      content:'';
-      position:fixed; inset:0; z-index:0;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
-      pointer-events:none;
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
     }
 
-    /* ─── STICKY WPP BTN ─── */
-    .sticky-wpp {
-      position:fixed;
-      bottom:0; left:0; right:0;
-      z-index:100;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      padding-bottom:env(safe-area-inset-bottom, 0px);
-    }
-
-    /* collapsed pill (always visible) */
-    .sticky-tab {
-      display:flex; align-items:center; gap:8px;
-      background:linear-gradient(135deg,#25d366,#1aad52);
-      color:#fff;
-      border:none; cursor:pointer;
-      border-radius:100px;
-      padding:9px 20px 9px 16px;
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:14px; font-weight:800;
-      letter-spacing:1px; text-transform:uppercase;
-      box-shadow:0 4px 20px rgba(34,197,94,.45);
-      margin-bottom:10px;
-      transition:transform .15s;
-      animation:wpp-glow 2.4s ease-in-out infinite;
-    }
-    .sticky-tab:active { transform:scale(.96); }
-    .sticky-tab svg { width:18px; height:18px; flex-shrink:0; }
-    .sticky-chevron {
-      width:16px; height:16px;
-      transition:transform .3s ease;
-      flex-shrink:0;
-    }
-    .sticky-wpp.open .sticky-chevron { transform:rotate(180deg); }
-
-    /* expanded panel */
-    .sticky-expanded {
-      width:100%;
-      overflow:hidden;
-      max-height:0;
-      transition:max-height .35s cubic-bezier(.4,0,.2,1), opacity .3s ease;
-      opacity:0;
-      pointer-events:none;
-    }
-    .sticky-wpp.open .sticky-expanded {
-      max-height:100px;
-      opacity:1;
-      pointer-events:auto;
-    }
-    .sticky-expanded-inner {
-      padding:0 16px calc(12px + env(safe-area-inset-bottom, 0px));
-      background:linear-gradient(to top, rgba(8,8,8,.98) 60%, transparent 100%);
-    }
-    .sticky-expanded-inner .btn-wpp {
-      max-width:398px;
-      margin:0 auto;
-      justify-content:center;
-    }
-
-    /* ─── MAIN WRAPPER ─── */
+    /* ── layout ── */
     .page {
-      position:relative; z-index:1;
-      max-width:430px;
-      margin:0 auto;
-      padding:0 16px;
+      position: relative; z-index: 1;
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 52px 24px calc(64px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* ─── VAGAS BANNER ─── */
-    .vagas-bar {
-      display:flex; align-items:center; justify-content:center;
-      gap:8px;
-      background:rgba(255,92,26,.1);
-      border-bottom:1px solid rgba(255,92,26,.2);
-      padding:9px 16px;
-      font-size:11.5px;
-      font-weight:600;
-      color:var(--o);
-      letter-spacing:.5px;
-      text-transform:uppercase;
-      margin:0 -16px 0;
-    }
-    .pulse-dot {
-      width:7px; height:7px; border-radius:50%;
-      background:var(--o);
-      animation:blink 1.4s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.3;} }
-
-    /* ─── HERO SECTION ─── */
-    .hero {
-      padding:28px 0 20px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      text-align:center;
+    /* ── photo ── */
+    .photo-wrap {
+      position: relative;
+      width: 190px; height: 190px;
+      margin-bottom: 28px;
     }
 
-    /* avatar */
-    .av-wrap {
-      position:relative;
-      margin-bottom:18px;
-      width:128px; height:128px;
-      display:flex; align-items:center; justify-content:center;
-    }
-    /* spinning ring — thin comet style */
-    .av-ring {
-      position:absolute; inset:0;
-      border-radius:50%;
-      background:conic-gradient(
-        transparent        0deg,
-        rgba(255,92,26,.1) 15deg,
-        rgba(255,92,26,.5) 55deg,
-        var(--o)          130deg,
-        var(--o2)         210deg,
-        rgba(255,61,0,.25) 290deg,
-        transparent       330deg
+    /* outer glow ring */
+    .photo-wrap::before {
+      content: '';
+      position: absolute; inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(
+        transparent 0deg,
+        transparent 30deg,
+        rgba(232,105,42,.18) 75deg,
+        var(--o) 160deg,
+        rgba(232,105,42,.22) 235deg,
+        transparent 280deg,
+        transparent 360deg
       );
-      animation:spin 4s linear infinite;
-      z-index:0;
-    }
-    @keyframes spin { to { transform:rotate(360deg); } }
-    /* static photo container */
-    .av-inner {
-      position:relative; z-index:1;
-      width:120px; height:120px; border-radius:50%;
-      background:var(--s1);
-      border:3px solid var(--bg);
-      overflow:hidden;
-      display:flex; align-items:center; justify-content:center;
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:34px; font-weight:900;
-      color:var(--o);
-      letter-spacing:1px;
-    }
-    .av-badge {
-      position:absolute; bottom:2px; right:-4px;
-      z-index:2;
-      background:var(--o);
-      color:#fff;
-      font-size:10px; font-weight:700;
-      padding:3px 7px;
-      border-radius:100px;
-      border:2px solid var(--bg);
-      letter-spacing:.3px;
-      white-space:nowrap;
+      animation: spin 8s linear infinite;
     }
 
-    /* creator tag */
-    .creator-tag {
-      font-size:11px; font-weight:600;
-      color:rgba(255,255,255,.55);
-      letter-spacing:1.5px;
-      text-transform:uppercase;
-      margin-top:4px; margin-bottom:2px;
-    }
-    .creator-tag strong { color:var(--o); font-weight:700; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* name */
-    .hero-name {
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:36px; font-weight:900;
-      line-height:1; letter-spacing:1.5px;
-      text-transform:uppercase;
-      color:var(--t1);
-    }
-    .hero-name em { font-style:normal; color:var(--o); }
-
-    .hero-role {
-      font-size:12px; font-weight:500;
-      color:rgba(255,255,255,.7);
-      letter-spacing:3px;
-      text-transform:uppercase;
-      margin-top:5px;
+    /* inner gap */
+    .photo-wrap::after {
+      content: '';
+      position: absolute; inset: 2px;
+      border-radius: 50%;
+      border: 1px solid var(--border2);
+      z-index: 1;
+      pointer-events: none;
     }
 
-    /* proof chips */
-    .proof-row {
-      display:flex; gap:8px; margin-top:16px;
-      flex-wrap:wrap; justify-content:center;
-    }
-    .chip {
-      display:flex; align-items:center; gap:5px;
-      background:var(--s2);
-      border:1px solid var(--br);
-      border-radius:100px;
-      padding:5px 12px;
-      font-size:12px; font-weight:500;
-      color:var(--t1);
-    }
-    .chip strong { color:var(--o); font-weight:700; }
-
-    /* attend row */
-    .attend-row {
-      display:flex; gap:8px; margin-top:12px;
-      flex-wrap:wrap; justify-content:center;
-    }
-    .attend-chip {
-      display:flex; align-items:center; gap:6px;
-      background:var(--s2);
-      border:1px solid var(--br);
-      border-radius:100px;
-      padding:5px 13px;
-      font-size:12px; font-weight:500;
-      color:rgba(255,255,255,.72);
-    }
-    .attend-chip--online {
-      border-color:rgba(34,197,94,.25);
-      background:rgba(34,197,94,.06);
-      color:rgba(34,197,94,.9);
-    }
-    .attend-dot {
-      width:6px; height:6px; border-radius:50%;
-      background:var(--o);
-      animation:blink 1.8s ease-in-out infinite;
-    }
-    .attend-dot--green {
-      background:#22c55e;
+    .photo-img {
+      position: absolute; inset: 5px;
+      width: calc(100% - 10px);
+      height: calc(100% - 10px);
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      z-index: 0;
     }
 
-    /* ─── SECTION LABEL ─── */
-    .sec-label {
-      display:flex; align-items:center; gap:10px;
-      margin:24px 0 14px;
-    }
-    .sec-label::before, .sec-label::after {
-      content:''; flex:1; height:1px;
-      background:var(--br);
-    }
-    .sec-label span {
-      font-size:10px; font-weight:700;
-      letter-spacing:3px; text-transform:uppercase;
-      color:rgba(255,255,255,.48);
+    .photo-fallback {
+      position: absolute; inset: 5px;
+      border-radius: 50%;
+      background: var(--bg3);
+      display: none;
+      align-items: center; justify-content: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 42px; font-weight: 800;
+      color: var(--o);
+      letter-spacing: 2px;
     }
 
-    /* ─── PROMISE BLOCK ─── */
-    .promise {
-      background:var(--s1);
-      border:1px solid var(--br2);
-      border-radius:20px;
-      overflow:hidden;
-      margin-bottom:12px;
-    }
-    .promise-top {
-      background:linear-gradient(90deg, var(--o) 0%, var(--o2) 100%);
-      padding:14px 20px 12px;
-    }
-    .promise-top h1 {
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:28px; font-weight:900;
-      line-height:1.1; letter-spacing:.5px;
-      color:#fff;
-      text-transform:uppercase;
-    }
-    .promise-top p {
-      font-size:13px; font-weight:400;
-      color:rgba(255,255,255,.92);
-      margin-top:5px; line-height:1.5;
-    }
-    .promise-body {
-      padding:18px 20px 20px;
-    }
-    .pain-text {
-      font-size:13.5px; color:rgba(255,255,255,.75);
-      line-height:1.7; margin-bottom:16px;
-      font-weight:300;
-    }
-    .pain-text strong { color:#f0f0f0; font-weight:500; }
-
-    /* benefits */
-    .blist {
-      list-style:none;
-      display:flex; flex-direction:column; gap:11px;
-    }
-    .blist li {
-      display:flex; align-items:flex-start; gap:12px;
-      font-size:13.5px; color:rgba(255,255,255,.75);
-      line-height:1.5;
-    }
-    .blist li .ico {
-      min-width:32px; height:32px;
-      background:var(--og2);
-      border:1px solid var(--br2);
-      border-radius:9px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:14px;
-      margin-top:1px;
-    }
-    .blist li strong { color:#f0f0f0; font-weight:600; display:block; font-size:13.5px; }
-    .blist li span { display:block; font-size:12px; color:rgba(255,255,255,.52); margin-top:1px; }
-
-    /* ─── TESTIMONIAL CAROUSEL ─── */
-    .testimonials-wrap { margin-bottom:12px; }
-    .testi-header {
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:10px; padding:0 2px;
-    }
-    .testi-title {
-      font-size:10px; font-weight:700;
-      letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.52);
-    }
-    .testi-status {
-      display:flex; align-items:center; gap:5px;
-      font-size:10px; color:rgba(255,255,255,.45); letter-spacing:.5px;
-    }
-    .testi-dot {
-      width:6px; height:6px; border-radius:50%;
-      background:var(--o); animation:blink 1.4s ease-in-out infinite;
-      transition:background .3s;
-    }
-    .testi-dot.paused { background:#555; animation:none; }
-    .testi-viewport {
-      position:relative; border-radius:16px; overflow:hidden;
-    }
-    .testi-viewport::before, .testi-viewport::after {
-      content:''; position:absolute; left:0; right:0; z-index:2;
-      height:22px; pointer-events:none;
-    }
-    .testi-viewport::before { top:0; background:linear-gradient(to bottom,var(--bg),transparent); }
-    .testi-viewport::after  { bottom:0; background:linear-gradient(to top,var(--bg),transparent); }
-    .testi-track {
-      display:flex; flex-direction:column; gap:10px;
-      transition:transform .7s cubic-bezier(.4,0,.2,1);
-      will-change:transform;
-    }
-    .testi-card {
-      background:var(--s2); border:1px solid var(--br);
-      border-radius:16px; padding:18px 18px 16px;
-      position:relative; overflow:hidden; flex-shrink:0;
-    }
-    .testi-card::before {
-      content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
-      background:linear-gradient(180deg,var(--o),var(--o2));
-    }
-    .testi-stars { font-size:12px; color:var(--o); letter-spacing:2px; margin-bottom:8px; }
-    .testi-quote {
-      font-size:13px; color:rgba(255,255,255,.78); font-style:italic;
-      line-height:1.65; font-weight:300; margin-bottom:14px;
-    }
-    .testi-quote strong { color:#f2f2f2; font-style:normal; font-weight:600; }
-    .testi-author { display:flex; align-items:center; gap:10px; }
-    .testi-avatar {
-      width:34px; height:34px; border-radius:50%;
-      background:var(--og2); border:1px solid var(--br2);
-      display:flex; align-items:center; justify-content:center;
-      font-size:11px; font-weight:700; color:var(--o); flex-shrink:0;
-      font-family:'Barlow Condensed',sans-serif;
-    }
-    .testi-name { font-size:12px; font-weight:600; color:#f0f0f0; line-height:1.2; }
-    .testi-label { font-size:10.5px; color:rgba(255,255,255,.5); margin-top:2px; letter-spacing:.3px; }
-    .testi-hint {
-      display:flex; align-items:center; justify-content:center; gap:5px;
-      margin-top:8px; font-size:11px; color:rgba(255,255,255,.38); letter-spacing:.3px;
-      opacity:1; transition:opacity .6s ease;
-    }
-    .testi-hint.hidden { opacity:0; }
-
-    /* ─── NUMBERS BAR ─── */
-    .numbers-bar {
-      display:grid; grid-template-columns:repeat(3,1fr);
-      background:var(--s2);
-      border:1px solid var(--br);
-      border-radius:16px;
-      overflow:hidden;
-      margin-bottom:12px;
-    }
-    .num-item {
-      padding:16px 10px;
-      text-align:center;
-      border-right:1px solid var(--br);
-    }
-    .num-item:last-child { border-right:none; }
-    .num-val {
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:28px; font-weight:900;
-      color:var(--o); line-height:1;
-      letter-spacing:.5px;
-    }
-    .num-lbl {
-      font-size:10px; color:rgba(255,255,255,.55);
-      text-transform:uppercase; letter-spacing:.5px;
-      margin-top:4px; font-weight:500;
+    /* ── brand label ── */
+    .brand-label {
+      display: flex; align-items: center; gap: 7px;
+      margin-bottom: 10px;
     }
 
-    /* ─── BUTTONS ─── */
+    .brand-label span {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 3.5px; text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .brand-label::before,
+    .brand-label::after {
+      content: '';
+      width: 20px; height: 1px;
+      background: var(--border2);
+    }
+
+    /* ── name ── */
+    .name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 46px; font-weight: 900;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      line-height: 1;
+      text-align: center;
+      color: var(--t1);
+      margin-bottom: 4px;
+    }
+
+    .name-role {
+      font-size: 11px; font-weight: 400;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--t3);
+      text-align: center;
+    }
+
+    /* ── divider ── */
+    .divider {
+      width: 100%;
+      display: flex; align-items: center; gap: 14px;
+      margin: 26px 0 24px;
+    }
+
+    .divider-line {
+      flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    }
+
+    .divider-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--o);
+      opacity: .4;
+    }
+
+    /* ── bio ── */
+    .bio {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 0 4px;
+    }
+
+    .bio-text {
+      font-size: 14px; font-weight: 300;
+      line-height: 1.75;
+      color: rgba(240,237,232,.7);
+    }
+
+    .bio-text strong {
+      font-weight: 500;
+      color: var(--t1);
+    }
+
+    .bio-highlight {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px; font-weight: 500;
+      font-style: italic;
+      color: var(--o);
+      letter-spacing: .2px;
+    }
+
+    /* ── buttons ── */
+    .links {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .btn {
-      display:flex; align-items:center; justify-content:center;
-      gap:10px; width:100%;
-      padding:17px 20px;
-      border-radius:14px;
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:17px; font-weight:800;
-      letter-spacing:1.5px; text-transform:uppercase;
-      text-decoration:none; border:none; cursor:pointer;
-      transition:transform .15s ease, box-shadow .15s ease;
-      position:relative; overflow:hidden;
-      text-align:center;
-    }
-    .btn:active { transform:scale(.97) !important; }
-
-    .btn-wpp {
-      background:linear-gradient(135deg, #25d366, #1aad52);
-      color:#fff;
-      box-shadow:0 8px 32px rgba(34,197,94,.38);
-    }
-    .btn-wpp:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(34,197,94,.5); }
-    .btn-wpp svg { width:22px; height:22px; flex-shrink:0; }
-
-    .btn-secondary {
-      background:var(--s2);
-      color:var(--t1);
-      border:1px solid var(--br);
-      font-size:15px;
-    }
-    .btn-secondary:hover { border-color:var(--o); color:var(--o); }
-
-    .btn-digital {
-      background:transparent;
-      color:var(--o);
-      border:1.5px solid rgba(255,92,26,.5);
-      font-size:15px;
-    }
-    .btn-digital:hover { background:var(--og2); border-color:var(--o); }
-
-    /* wpp pulse */
-    @keyframes wpp-glow {
-      0%,100% { box-shadow:0 8px 32px rgba(34,197,94,.38); }
-      50%      { box-shadow:0 8px 44px rgba(34,197,94,.65); }
-    }
-    .btn-wpp { animation:wpp-glow 2.4s ease-in-out infinite; }
-
-    /* ─── DIGITAL PRODUCT ─── */
-    .digital-card {
-      background:linear-gradient(135deg, #110800, var(--s2));
-      border:1px solid rgba(255,92,26,.3);
-      border-radius:20px;
-      padding:22px 20px;
-      position:relative; overflow:hidden;
-    }
-    .digital-card::after {
-      content:'';
-      position:absolute; inset:0;
-      background:radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255,92,26,.08), transparent);
-      pointer-events:none;
-    }
-    .soon-tag {
-      display:inline-flex; align-items:center; gap:5px;
-      background:rgba(255,92,26,.15);
-      border:1px solid rgba(255,92,26,.3);
-      border-radius:100px;
-      padding:3px 10px;
-      font-size:10.5px; font-weight:700;
-      color:var(--o); letter-spacing:1px;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .digital-card h3 {
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:24px; font-weight:900;
-      letter-spacing:.5px;
-      color:var(--t1); margin-bottom:8px;
-      text-transform:uppercase;
-    }
-    .digital-card p {
-      font-size:13px; color:var(--t3);
-      line-height:1.6; margin-bottom:18px;
+      display: flex; align-items: center; gap: 14px;
+      width: 100%; padding: 18px 20px;
+      border-radius: 12px;
+      text-decoration: none; border: 1px solid transparent; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      position: relative; overflow: hidden;
     }
 
-    /* ─── SOCIAL ─── */
+    .btn:active { transform: scale(.975) !important; }
+
+    /* orange */
+    .btn--orange {
+      background: var(--o);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(232,105,42,.25);
+    }
+
+    .btn--orange::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.09) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .btn--orange:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 36px rgba(232,105,42,.38);
+    }
+
+    /* dark */
+    .btn--dark {
+      background: var(--bg3);
+      border-color: var(--border);
+      color: var(--t1);
+    }
+
+    .btn--dark:hover {
+      border-color: var(--border2);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,.3);
+    }
+
+    /* wpp */
+    .btn--wpp {
+      background: var(--bg3);
+      border-color: rgba(37,211,102,.13);
+      color: var(--t1);
+    }
+
+    .btn--wpp:hover {
+      border-color: rgba(37,211,102,.35);
+      transform: translateY(-2px);
+    }
+
+    .btn-icon {
+      width: 38px; height: 38px; flex-shrink: 0;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .btn--orange .btn-icon { background: rgba(0,0,0,.12); }
+    .btn--dark   .btn-icon { background: var(--o-dim); border: 1px solid var(--border2); color: var(--o); }
+    .btn--wpp    .btn-icon { background: rgba(37,211,102,.07); color: #25d366; }
+
+    .btn-icon svg { width: 17px; height: 17px; }
+
+    .btn-text { flex: 1; }
+
+    .btn-label {
+      display: block;
+      font-size: 14px; font-weight: 500;
+      line-height: 1.2;
+    }
+
+    .btn-sub {
+      display: block;
+      font-size: 11px; font-weight: 300;
+      opacity: .45; margin-top: 2px;
+    }
+
+    .btn--orange .btn-sub { opacity: .65; }
+
+    .btn-arrow {
+      flex-shrink: 0; opacity: .2;
+      transition: opacity .2s, transform .2s;
+    }
+
+    .btn:hover .btn-arrow { opacity: .5; transform: translateX(3px); }
+    .btn--orange .btn-arrow { opacity: .55; }
+    .btn--orange:hover .btn-arrow { opacity: .9; }
+
+    /* ── social row ── */
     .social-row {
-      display:flex; justify-content:center; gap:10px;
+      display: flex; gap: 8px;
+      width: 100%;
     }
+
     .soc-btn {
-      width:44px; height:44px;
-      background:var(--s2); border:1px solid var(--br);
-      border-radius:12px;
-      display:flex; align-items:center; justify-content:center;
-      text-decoration:none; color:var(--t3);
-      transition:all .2s;
+      flex: 1;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 13px;
+      border-radius: 10px;
+      text-decoration: none;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--t2);
+      font-size: 11.5px; font-weight: 400;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      transition: all .2s ease;
     }
-    .soc-btn:hover { border-color:var(--o); color:var(--o); transform:translateY(-2px); }
-    .soc-btn svg { width:18px; height:18px; }
 
-    /* ─── FOOTER ─── */
+    .soc-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    .soc-btn:hover {
+      border-color: var(--border2);
+      color: var(--o);
+      transform: translateY(-2px);
+    }
+
+    /* ── footer ── */
     .foot {
-      text-align:center;
-      font-size:11px; color:rgba(255,255,255,.38);
-      letter-spacing:.5px;
-      padding-top:8px;
+      margin-top: 40px;
+      text-align: center;
     }
 
-    /* ─── ANIMATIONS ─── */
+    .foot-brand {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--t3);
+    }
+
+    .foot-copy {
+      font-size: 10px; font-weight: 300;
+      color: var(--t3);
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-top: 4px; opacity: .55;
+    }
+
+    /* ── animations ── */
     .fade-up {
-      opacity:0;
-      transform:translateY(24px);
-      animation:fadeUp .55s ease forwards;
-    }
-    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
-
-    .d1{animation-delay:.04s} .d2{animation-delay:.1s} .d3{animation-delay:.16s}
-    .d4{animation-delay:.22s} .d5{animation-delay:.28s} .d6{animation-delay:.34s}
-    .d7{animation-delay:.40s} .d8{animation-delay:.46s} .d9{animation-delay:.52s}
-    .d10{animation-delay:.58s}
-
-    /* ─── MINI FAQ ─── */
-    .faq-list {
-      display:flex; flex-direction:column; gap:8px;
-      margin-bottom:24px;
-    }
-    .faq-item {
-      background:var(--s2);
-      border:1px solid var(--br);
-      border-radius:14px;
-      overflow:hidden;
-      transition:border-color .2s;
-    }
-    .faq-item[open] {
-      border-color:var(--br2);
-    }
-    .faq-q {
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-      padding:15px 18px;
-      font-size:13.5px; font-weight:600; color:var(--t1);
-      cursor:pointer;
-      list-style:none;
-      user-select:none;
-    }
-    .faq-q::-webkit-details-marker { display:none; }
-    .faq-chevron {
-      width:16px; height:16px; flex-shrink:0;
-      color:var(--t3);
-      transition:transform .25s ease;
-    }
-    .faq-item[open] .faq-chevron { transform:rotate(180deg); color:var(--o); }
-    .faq-a {
-      padding:0 18px 15px;
-      font-size:13px; color:rgba(255,255,255,.72);
-      line-height:1.65; font-weight:300;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp .65s cubic-bezier(.22,1,.36,1) forwards;
     }
 
-    /* ─── LAPIDADOS CARD ─── */
-    .lapidados-card {
-      background:var(--s1);
-      border:1px solid rgba(255,92,26,.3);
-      border-radius:20px;
-      overflow:hidden;
-      margin-bottom:12px;
-      position:relative;
-    }
-    .lapidados-card::before {
-      content:'';
-      position:absolute; inset:0;
-      background:radial-gradient(ellipse 80% 40% at 50% 0%, rgba(255,92,26,.09), transparent 65%);
-      pointer-events:none;
-    }
-    .lapidados-header {
-      background:linear-gradient(135deg, #221008, #180a03);
-      border-bottom:1px solid rgba(255,92,26,.25);
-      padding:20px 20px 18px;
-    }
-    .lapidados-tag {
-      display:inline-flex; align-items:center;
-      background:rgba(255,92,26,.2);
-      border:1px solid rgba(255,92,26,.5);
-      border-radius:100px;
-      padding:3px 11px;
-      font-size:10px; font-weight:700;
-      color:#ffaa80; letter-spacing:1.5px;
-      text-transform:uppercase;
-      margin-bottom:10px;
-    }
-    .lapidados-title {
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:32px; font-weight:900;
-      line-height:1.05; letter-spacing:.5px;
-      color:#f5f5f5; text-transform:uppercase;
-      margin-bottom:8px;
-    }
-    .lapidados-title em { font-style:normal; color:var(--o); }
-    .lapidados-sub {
-      font-size:13px; color:rgba(255,255,255,.82);
-      line-height:1.55; font-weight:300;
-    }
-    .lapidados-body { padding:18px 20px 22px; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* mechanism list */
-    .mec-list {
-      display:flex; flex-direction:column; gap:12px;
-      margin-bottom:22px;
-    }
-    .mec-item {
-      display:flex; align-items:flex-start; gap:12px;
-    }
-    .mec-ico {
-      min-width:34px; height:34px;
-      background:var(--og2);
-      border:1px solid var(--br2);
-      border-radius:10px;
-      display:flex; align-items:center; justify-content:center;
-      font-size:15px; flex-shrink:0; margin-top:1px;
-    }
-    .mec-item strong {
-      display:block; font-size:13.5px; font-weight:600;
-      color:#f0f0f0; margin-bottom:2px;
-    }
-    .mec-item span {
-      font-size:12px; color:rgba(255,255,255,.62); line-height:1.55;
-    }
-
-    /* rank track */
-    .rank-label {
-      font-size:10px; font-weight:700;
-      letter-spacing:2.5px; text-transform:uppercase;
-      color:rgba(255,255,255,.5); text-align:center;
-      margin-bottom:12px;
-    }
-    .rank-track {
-      display:flex; align-items:center; justify-content:center;
-      gap:4px; flex-wrap:nowrap;
-    }
-    .rank-step {
-      display:flex; flex-direction:column;
-      align-items:center; gap:5px;
-    }
-    .rank-step span {
-      font-size:9px; color:rgba(255,255,255,.55);
-      letter-spacing:.5px; text-transform:uppercase;
-      font-weight:500;
-    }
-    .rank-final span { color:var(--o); font-weight:700; }
-    .rank-badge {
-      width:36px; height:36px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      font-family:'Barlow Condensed',sans-serif;
-      font-size:15px; font-weight:900;
-      letter-spacing:.5px;
-    }
-    .rank-1 { background:#1e1e1e; border:1px solid #333; color:#666; }
-    .rank-2 { background:#1a1510; border:1px solid #4a3a20; color:#8a6a30; }
-    .rank-3 { background:#1a1205; border:1px solid rgba(255,92,26,.3); color:var(--o); }
-    .rank-4 { background:rgba(255,92,26,.15); border:1px solid rgba(255,92,26,.5); color:var(--o); }
-    .rank-5 {
-      background:linear-gradient(135deg, var(--o), var(--o2));
-      border:none; color:#fff;
-      box-shadow:0 0 16px rgba(255,92,26,.5);
-    }
-    .rank-arrow {
-      font-size:12px; color:var(--t3);
-      margin-bottom:18px; flex-shrink:0;
-    }
-
-    /* counter number anim */
-    .count { display:inline-block; }
+    .d1  { animation-delay: .04s; }
+    .d2  { animation-delay: .11s; }
+    .d3  { animation-delay: .18s; }
+    .d4  { animation-delay: .25s; }
+    .d5  { animation-delay: .32s; }
+    .d6  { animation-delay: .39s; }
+    .d7  { animation-delay: .46s; }
+    .d8  { animation-delay: .53s; }
+    .d9  { animation-delay: .60s; }
+    .d10 { animation-delay: .67s; }
   </style>
 </head>
+
 <body>
-
-<!-- ══ STICKY WPP ══ -->
-<div class="sticky-wpp fade-up d10" id="stickyWpp">
-  <button class="sticky-tab" id="stickyTab" aria-label="Abrir contato WhatsApp">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.122 1.523 5.857L.057 23.676a.496.496 0 00.612.612l5.82-1.466A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.899 0-3.68-.524-5.208-1.432l-.368-.215-3.452.869.888-3.434-.238-.375A9.945 9.945 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-    Falar com o Leo
-    <svg class="sticky-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
-  </button>
-  <div class="sticky-expanded" id="stickyExpanded">
-    <div class="sticky-expanded-inner">
-      <a class="btn btn-wpp"
-         href="https://wa.me/5582999999999?text=Olá%20Leo!%20Quero%20entrar%20no%20acompanhamento%20e%20evoluir%20meu%20shape%20de%20verdade.%20Pode%20me%20contar%20como%20funciona?%20🔥"
-         target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.122 1.523 5.857L.057 23.676a.496.496 0 00.612.612l5.82-1.466A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.899 0-3.68-.524-5.208-1.432l-.368-.215-3.452.869.888-3.434-.238-.375A9.945 9.945 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-        Quero entrar no acompanhamento
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- ══ PAGE ══ -->
 <div class="page">
 
-  <!-- vagas bar -->
-  <div class="vagas-bar fade-up d1">
-    <div class="pulse-dot"></div>
-    <span id="vagasText">Vagas abertas, restam poucas</span>
+  <!-- photo -->
+  <div class="photo-wrap fade-up d1">
+    <img class="photo-img"
+         src="assets/foto-perfil.png"
+         alt="Leonardo Campelo"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="photo-fallback">LC</div>
   </div>
 
-  <!-- ── HERO ── -->
-  <section class="hero fade-up d2">
-    <div class="av-wrap">
-      <div class="av-ring"></div>
-      <div class="av-inner"> <img src="assets/foto-perfil.png" alt="foto do nutri"></div>
-      <div class="av-badge">▸ Nutricionista</div>
-    </div>
-
-    <div class="hero-name">Leo <em>Campelo</em></div>
-    <div class="creator-tag">Criador do <strong>Lapidados Club</strong></div>
-    <div class="hero-role">Recomposição corporal, hipertrofia e emagrecimento</div>
-
-    <div class="attend-row">
-      <div class="attend-chip">
-        <span class="attend-dot"></span>
-        📍 Presencial · Maceió
-      </div>
-      <div class="attend-chip attend-chip--online">
-        <span class="attend-dot attend-dot--green"></span>
-        🌎 Online · Mundo todo
-      </div>
-    </div>
-
-    <div class="proof-row" style="justify-content:center;">
-      <div class="chip">⚡ Método <strong>LAPIDADO</strong></div>
-    </div>
-  </section>
-
-  <!-- ── NUMBERS ── -->
-  <div class="numbers-bar fade-up d3">
-    <div class="num-item">
-      <div class="num-val"><span class="count" data-target="500">0</span>+</div>
-      <div class="num-lbl">No método Lapidado</div>
-    </div>
-    <div class="num-item">
-      <div class="num-val"><span class="count" data-target="60">0</span></div>
-      <div class="num-lbl">Dias p/ resultado</div>
-    </div>
-    <div class="num-item">
-      <div class="num-val"><span class="count" data-target="5">0</span></div>
-      <div class="num-lbl">Anos de exp.</div>
-    </div>
+  <!-- brand -->
+  <div class="brand-label fade-up d2">
+    <span>Lapidados Club</span>
   </div>
 
+  <!-- name -->
+  <h1 class="name fade-up d2">Leonardo Campelo</h1>
+  <p class="name-role fade-up d2">Nutricionista Esportivo</p>
 
-  <!-- ── NOVA ERA DOS LAPIDADOS ── -->
-  <div class="sec-label fade-up d4"><span>O sistema</span></div>
-
-  <div class="lapidados-card fade-up d4">
-    <div class="lapidados-header">
-      <div class="lapidados-tag">Método exclusivo</div>
-      <h2 class="lapidados-title">A Nova Era<br>dos <em>Lapidados</em></h2>
-      <p class="lapidados-sub">Não é dieta. É um sistema de acompanhamento baseado em dados, psicologia positiva e gamificação real.</p>
-    </div>
-
-    <div class="lapidados-body">
-      <p class="pain-text" style="margin-bottom:18px;color:rgba(255,255,255,.78);">
-        Toda semana você faz um <strong>check-in estruturado</strong> com dados reais do seu corpo e da sua rotina.
-        Com base nesses dados, o protocolo é ajustado. Nada de achismo. Nada de "tenta mais um mês".
-        Você sabe exatamente onde está e o que precisa melhorar.
-      </p>
-
-      <div class="mec-list">
-        <div class="mec-item">
-          <div class="mec-ico">📋</div>
-          <div><strong>Check-in semanal estruturado</strong><span>Fome, treino, sono, intestino, cardio e consistência, analisados toda semana</span></div>
-        </div>
-        <div class="mec-item">
-          <div class="mec-ico">🧠</div>
-          <div><strong>Psicologia positiva aplicada</strong><span>O sistema é desenhado pra manter motivação real, não força de vontade que some em 2 semanas</span></div>
-        </div>
-        <div class="mec-item">
-          <div class="mec-ico">🏆</div>
-          <div><strong>Gamificação com ranking evolutivo</strong><span>Você sobe de nível conforme evolui, isso cria senso de progresso constante e real</span></div>
-        </div>
-      </div>
-
-      <div class="rank-label">Sua jornada de evolução</div>
-      <div class="rank-track">
-        <div class="rank-step">
-          <div class="rank-badge rank-1">B</div>
-          <span>Bruto</span>
-        </div>
-        <div class="rank-arrow">→</div>
-        <div class="rank-step">
-          <div class="rank-badge rank-2">P</div>
-          <span>Polido</span>
-        </div>
-        <div class="rank-arrow">→</div>
-        <div class="rank-step">
-          <div class="rank-badge rank-3">A</div>
-          <span>Afiado</span>
-        </div>
-        <div class="rank-arrow">→</div>
-        <div class="rank-step">
-          <div class="rank-badge rank-4">I</div>
-          <span>Imparável</span>
-        </div>
-        <div class="rank-arrow">→</div>
-        <div class="rank-step rank-final">
-          <div class="rank-badge rank-5">L</div>
-          <span>Lapidado</span>
-        </div>
-      </div>
-      <p style="font-size:11.5px;color:rgba(255,255,255,.45);text-align:center;margin-top:10px;letter-spacing:.3px;">Cada nível representa evolução mensurável. Você sempre sabe onde está.</p>
-    </div>
+  <!-- divider -->
+  <div class="divider fade-up d3">
+    <div class="divider-line"></div>
+    <div class="divider-dot"></div>
+    <div class="divider-line"></div>
   </div>
 
+  <!-- bio -->
+  <div class="bio fade-up d3">
+    <p class="bio-text">
+      <strong>Leo Campelo</strong>, nutricionista e criador do <strong>Lapidados Club</strong> —
+      um método de acompanhamento construído sobre flexibilidade real e um
+      sistema de pontos semanal que mantém a adesão de cada Lapidado(a) no longo prazo.
+    </p>
+    <span class="bio-highlight">Não te falta genética. Te falta método.</span>
+  </div>
 
+  <!-- links -->
+  <div class="links">
 
-  <!-- ── CTA PRINCIPAL ── -->
-  <div class="sec-label fade-up d6"><span>Comece sua evolução</span></div>
-
-  <div class="fade-up d6" style="margin-bottom:10px;">
-    <a class="btn btn-wpp"
-       href="https://wa.me/5582993864217?text=Olá%20Leo!%20Quero%20entrar%20no%20acompanhamento%20e%20evoluir%20meu%20shape%20de%20verdade.%20Pode%20me%20contar%20como%20funciona?%20🔥"
+    <!-- planos -->
+    <a class="btn btn--orange fade-up d4"
+       href="https://SEU-SITE-DE-PLANOS.com"
        target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor" style="width:22px;height:22px;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.122 1.523 5.857L.057 23.676a.496.496 0 00.612.612l5.82-1.466A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.899 0-3.68-.524-5.208-1.432l-.368-.215-3.452.869.888-3.434-.238-.375A9.945 9.945 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-      Quero começar meu acompanhamento
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M8 12h8M8 8h5M8 16h3"/>
+        </svg>
+      </div>
+      <div class="btn-text">
+        <span class="btn-label">Planos de Acompanhamento</span>
+        <span class="btn-sub">Valores, método e informações completas</span>
+      </div>
+      <svg class="btn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
-  </div>
 
-  <p class="fade-up d6" style="text-align:center;font-size:11.5px;color:var(--t3);margin-bottom:24px;letter-spacing:.3px;">
-    Respondo no mesmo dia · Sem compromisso
-  </p>
-
-
-
-  <!-- ── PROOF CAROUSEL ── -->
-  <div class="testimonials-wrap fade-up d5">
-    <div class="testi-header">
-      <span class="testi-title">Quem já está no sistema</span>
-      <div class="testi-status" id="testiStatus">
-        <span class="testi-dot" id="testiDot"></span>
-        <span class="testi-status-txt" id="testiTxt">passando</span>
-      </div>
-    </div>
-
-    <div class="testi-viewport" id="testiViewport">
-      <div class="testi-track" id="testiTrack">
-
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"Perdi <strong> 8kg de gordura em 3 meses </strong> e ganhei massa ao mesmo tempo. Já tinha tentado dieta restritiva antes e não ficava nem 2 semanas. Com o sistema do Leo é diferente, você entende o porquê de cada ajuste."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">RM</div>
-            <div>
-              <div class="testi-name">Rafael M. · <span style="color:var(--o);font-size:10px;">rank AFIADO</span></div>
-              <div class="testi-label">Aluno presencial · Maceió</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"Moro em Portugal. Achei que online não ia funcionar, estava errada. O Leo <strong>acompanha mais de perto do que qualquer nutri</strong> que já tive aqui. Em 60 dias meu shape mudou completamente."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">AC</div>
-            <div>
-              <div class="testi-name">Ana C. · <span style="color:var(--o);font-size:10px;">rank POLIDA</span></div>
-              <div class="testi-label">Aluna online · Portugal 🇵🇹</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"Tentei emagrecer por anos sozinho. Em <strong> 2 meses perdi 6kg </strong> sem passar fome. O check-in semanal muda tudo, você sabe exatamente o que está funcionando e o que precisa ajustar."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">TS</div>
-            <div>
-              <div class="testi-name">Thiago S. · <span style="color:var(--o);font-size:10px;">rank IMPARÁVEL</span></div>
-              <div class="testi-label">Aluno online · São Paulo</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"O Leo <strong> realmente lê os seus dados </strong> e ajusta o protocolo. Não é planilha genérica. Na segunda semana já tinha resultado visível, e eu entendi o motivo de cada mudança."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">MF</div>
-            <div>
-              <div class="testi-name">Mariana F. · <span style="color:var(--o);font-size:10px;">rank LAPIDADA</span></div>
-              <div class="testi-label">Aluna presencial · Maceió</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="testi-card">
-          <div class="testi-stars">★★★★★</div>
-          <p class="testi-quote">"Faço acompanhamento online há 4 meses dos EUA. <strong>Acesso fácil, resposta rápida, resultado real.</strong> O sistema de ranking me mantém focado, é viciante no bom sentido."</p>
-          <div class="testi-author">
-            <div class="testi-avatar">JR</div>
-            <div>
-              <div class="testi-name">Jonas R. · <span style="color:var(--o);font-size:10px;">rank AFIADO</span></div>
-              <div class="testi-label">Aluno online · EUA 🇺🇸</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="testi-hint" id="testiHint">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6.5a2.5 2.5 0 00-5 0v.5"/><path d="M14 10.5a2.5 2.5 0 00-5 0V11"/><path d="M10 10.5a2.5 2.5 0 00-5 0V16a7 7 0 0014 0v-5"/></svg>
-      Segure para pausar e ler
-    </div>
-  </div>
-
-
-
-  <!-- ── PROMISE ── -->
-  <div class="sec-label fade-up d4"><span>O diagnóstico honesto</span></div>
-
-  <div class="promise fade-up d4">
-    <div class="promise-top">
-      <h1>Você não falha por falta de esforço. Falha por falta de ajuste.</h1>
-      <p>Você já treinou, já tentou restringir, já seguiu planilha. O problema nunca foi força de vontade.</p>
-    </div>
-    <div class="promise-body">
-      <p class="pain-text">
-        A maioria das pessoas que treinam por meses sem resultado não estavam errando no exercício.
-        Estava errando na <strong>direção</strong>. Sem análise semanal, sem ajuste de rota, sem alguém
-        lendo os dados do seu físico, você só empurra mais do mesmo esperando um resultado diferente.
-      </p>
-      <ul class="blist">
-        <li>
-          <div class="ico">📊</div>
-          <div>
-            <strong>Sem análise, não tem evolução</strong>
-            <span>Fome, sono, treino, intestino e consistência, tudo isso impacta seu resultado e precisa ser monitorado</span>
-          </div>
-        </li>
-        <li>
-          <div class="ico">🔄</div>
-          <div>
-            <strong>Ajuste semanal muda tudo</strong>
-            <span>Um protocolo que não é revisado toda semana envelhece, e para de funcionar em semanas</span>
-          </div>
-        </li>
-        <li>
-          <div class="ico">🎯</div>
-          <div>
-            <strong>Direção vale mais que restrição</strong>
-            <span>Não é sobre cortar mais. É sobre saber exatamente o que corrigir, e fazer isso com consistência</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-
-
-  <!-- ── CTA INTERMEDIÁRIO ── -->
-  <div class="fade-up d5" style="margin-bottom:10px;">
-    <a class="btn btn-wpp"
-       href="https://wa.me/5582993864217?text=Olá%20Leo!%20Quero%20entrar%20no%20acompanhamento%20e%20evoluir%20meu%20shape%20de%20verdade.%20Pode%20me%20contar%20como%20funciona?%20🔥"
+    <!-- performance -->
+    <a class="btn btn--dark fade-up d5"
+       href="https://SEU-SITE-PERFORMANCE.com"
        target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor" style="width:22px;height:22px;flex-shrink:0;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.122 1.523 5.857L.057 23.676a.496.496 0 00.612.612l5.82-1.466A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.899 0-3.68-.524-5.208-1.432l-.368-.215-3.452.869.888-3.434-.238-.375A9.945 9.945 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-      Quero evoluir meu shape de verdade
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="btn-text">
+        <span class="btn-label">Performance · Atletas</span>
+        <span class="btn-sub">Natação · Corrida · Ciclismo</span>
+      </div>
+      <svg class="btn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
-  </div>
-  <p class="fade-up d5" style="text-align:center;font-size:11.5px;color:var(--t3);margin-bottom:24px;letter-spacing:.3px;">
-    Respondo no mesmo dia · Sem compromisso
-  </p>
 
+    <!-- wpp -->
+    <a class="btn btn--wpp fade-up d6"
+       href="https://wa.me/5582993864217?text=Olá%20Leonardo!%20Vi%20seu%20perfil%20e%20quero%20saber%20mais%20sobre%20o%20acompanhamento."
+       target="_blank" rel="noopener">
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.554 4.122 1.523 5.857L.057 23.676a.496.496 0 00.612.612l5.82-1.466A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.899 0-3.68-.524-5.208-1.432l-.368-.215-3.452.869.888-3.434-.238-.375A9.945 9.945 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+        </svg>
+      </div>
+      <div class="btn-text">
+        <span class="btn-label">Fale com o Nutri</span>
+        <span class="btn-sub">WhatsApp · respondo no mesmo dia</span>
+      </div>
+      <svg class="btn-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
 
-
-  <!-- ── FAQ ── -->
-  <div class="sec-label fade-up d7"><span>Dúvidas frequentes</span></div>
-
-  <div class="faq-list fade-up d7">
-
-    <details class="faq-item">
-      <summary class="faq-q">
-        <span>Funciona pra quem já tentou dieta e não deu certo?</span>
-        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <p class="faq-a">Exatamente pra essa pessoa. A maioria dos meus alunos passou por isso. O problema quase nunca é a dieta em si, é a falta de ajuste semanal e de um protocolo feito especificamente pro seu corpo e rotina.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary class="faq-q">
-        <span>Como funciona esse sistema de ranking?</span>
-        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <p class="faq-a">O objetivo principal do ranking é manter você dentro do planejamento e <strong> motivado a evoluir semana após semana</strong>. Funciona assim: toda semana, ao entrar no time, você responde um check-in (formulário que acumula pontos e tem RANK) sobre treino, dieta, intestino, sono, hidratação e consistência. Cada resposta gera pontos. Quanto mais completo e honesto for o check-in, mais pontos você acumula e mais rápido você sobe de rank. BRUTO é o ponto de partida, LAPIDADO é o topo. O sistema transforma consistência em progressão visível.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary class="faq-q">
-        <span>É pra iniciante ou pra quem já treina há anos?</span>
-        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <p class="faq-a">Os dois. O protocolo é montado do zero pra sua realidade atual. Se você é iniciante, começa do ponto certo. Se já treina há anos e está travado, a gente identifica exatamente o que está bloqueando sua evolução.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary class="faq-q">
-        <span>Quantas vezes preciso treinar?</span>
-        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <p class="faq-a">Adaptamos à sua rotina real. 3x, 4x ou 5x por semana, o que funciona pra você sustentando por meses, não por semanas. Consistência real vale mais do que frequência ideal.</p>
-    </details>
-
-    <details class="faq-item">
-      <summary class="faq-q">
-        <span>Atende fora de Maceió?</span>
-        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
-      </summary>
-      <p class="faq-a">Sim, atendo em todo o Brasil e no exterior. O acompanhamento online é feito pelo WhatsApp com o mesmo nível de atenção, análise e ajustes que o presencial.</p>
-    </details>
+    <!-- email + tiktok -->
+    <div class="social-row fade-up d7">
+      <a class="soc-btn" href="mailto:leocampelo@email.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/>
+        </svg>
+        E-mail
+      </a>
+      <a class="soc-btn" href="https://tiktok.com/@leocampelo" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.29 6.29 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.52V6.77a4.85 4.85 0 01-1.02-.08z"/>
+        </svg>
+        TikTok
+      </a>
+    </div>
 
   </div>
 
-
-  
-    <!-- ── SOCIAL ── -->
-  <div class="sec-label fade-up d8"><span>Me siga</span></div>
-
-  <div class="social-row fade-up d8" style="margin-bottom:20px;">
-    <a class="soc-btn" href="https://instagram.com/campelo.nutri" target="_blank" title="Instagram">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a class="soc-btn" href="https://wa.me/5582993864217" target="_blank" title="WhatsApp">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    </a>
-    <a class="soc-btn" href="http://campelo.nutri" target="_blank" title="Site">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    </a>
+  <!-- footer -->
+  <div class="foot fade-up d10">
+    <p class="foot-brand">Lapidados Club</p>
+    <p class="foot-copy">© 2026 Leonardo Campelo</p>
   </div>
 
-  <div class="foot fade-up d9">Leo Campelo · Nutricionista © Todos os direitos reservados</div>
-
-</div><!-- /page -->
-
-<script>
-/* ── sticky toggle ── */
-(function() {
-  const wrap = document.getElementById('stickyWpp');
-  const tab  = document.getElementById('stickyTab');
-  if (!tab || !wrap) return;
-  tab.addEventListener('click', function() {
-    wrap.classList.toggle('open');
-  });
-})();
-
-/* ── vagas dinâmicas + mês automático ── */
-(function() {
-  const TOTAL_VAGAS = 10;
-  const meses = ['janeiro','fevereiro','março','abril','maio','junho',
-                 'julho','agosto','setembro','outubro','novembro','dezembro'];
-
-  const now        = new Date();
-  const mes        = meses[now.getMonth()];
-  const dia        = now.getDate();
-  const daysInMonth= new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-
-  // Progresso do mês: 0 (dia 1) → 1 (último dia)
-  const progress = (dia - 1) / (daysInMonth - 1);
-
-  // Vagas base: decaimento não-linear (cai mais rápido no final do mês)
-  // curva quadrática: começa devagar, acelera no fim
-  const base = Math.round(TOTAL_VAGAS - (TOTAL_VAGAS - 1) * Math.pow(progress, 1.6));
-
-  // Jitter por visita: ±1 aleatório, clamped a [1, TOTAL_VAGAS]
-  const jitter = Math.floor(Math.random() * 3) - 1; // -1, 0 ou +1
-  const vagas  = Math.min(TOTAL_VAGAS, Math.max(1, base + jitter));
-
-  const el = document.getElementById('vagasText');
-  if (el) {
-    const urgencia = vagas <= 3 ? ' ⚠️' : '';
-    el.textContent = 'Vagas abertas para ' + mes + ', restam ' + vagas + urgencia;
-  }
-})();
-
-/* ── number counter ── */
-const counters = document.querySelectorAll('.count');
-const ioCount = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const el = e.target;
-    const target = +el.dataset.target;
-    const step = Math.ceil(target / (1200 / 16));
-    let current = 0;
-    const t = setInterval(() => {
-      current = Math.min(current + step, target);
-      el.textContent = current;
-      if (current >= target) clearInterval(t);
-    }, 16);
-    ioCount.unobserve(el);
-  });
-}, { threshold: 0.5 });
-counters.forEach(c => ioCount.observe(c));
-
-/* ── testimonial carousel ── */
-(function() {
-  const viewport  = document.getElementById('testiViewport');
-  const track     = document.getElementById('testiTrack');
-  const dot       = document.getElementById('testiDot');
-  const statusTxt = document.getElementById('testiTxt');
-  const hint      = document.getElementById('testiHint');
-
-  if (!track) return;
-
-  const cards = Array.from(track.querySelectorAll('.testi-card'));
-  const GAP   = 10; // px, matches CSS gap
-  let current = 0;
-  let paused  = false;
-  let timer   = null;
-  let hintTimer = null;
-
-  // ── measure & set viewport height to one card ──
-  function setHeight() {
-    // wait for layout
-    requestAnimationFrame(() => {
-      const h = cards[current] ? cards[current].offsetHeight : 160;
-      viewport.style.height = h + 'px';
-    });
-  }
-
-  // ── translate track so current card is visible ──
-  function goTo(idx, animate) {
-    current = ((idx % cards.length) + cards.length) % cards.length;
-    // measure card height dynamically (cards can differ)
-    let offset = 0;
-    for (let i = 0; i < current; i++) {
-      offset += cards[i].offsetHeight + GAP;
-    }
-    if (!animate) track.style.transition = 'none';
-    track.style.transform = `translateY(-${offset}px)`;
-    if (!animate) requestAnimationFrame(() => { track.style.transition = ''; });
-    // update viewport height to current card
-    viewport.style.height = cards[current].offsetHeight + 'px';
-  }
-
-  function next() { goTo(current + 1, true); }
-
-  function setPaused(val) {
-    paused = val;
-    if (val) {
-      clearInterval(timer);
-      dot.classList.add('paused');
-      statusTxt.textContent = 'pausado';
-    } else {
-      dot.classList.remove('paused');
-      statusTxt.textContent = 'passando';
-      timer = setInterval(next, 3200);
-    }
-  }
-
-  // ── init ──
-  setHeight();
-  goTo(0, false);
-  timer = setInterval(next, 3200);
-
-  // ── pause on hold (touch + mouse) ──
-  viewport.addEventListener('mousedown',  () => setPaused(true));
-  viewport.addEventListener('touchstart', () => setPaused(true), { passive: true });
-  viewport.addEventListener('mouseup',    () => setPaused(false));
-  viewport.addEventListener('mouseleave', () => { if (paused) setPaused(false); });
-  viewport.addEventListener('touchend',   () => setPaused(false));
-  viewport.addEventListener('touchcancel',() => setPaused(false));
-
-  // ── hide hint after 5s or first interaction ──
-  hintTimer = setTimeout(() => hint.classList.add('hidden'), 5000);
-  viewport.addEventListener('mousedown',  () => { hint.classList.add('hidden'); clearTimeout(hintTimer); }, { once: true });
-  viewport.addEventListener('touchstart', () => { hint.classList.add('hidden'); clearTimeout(hintTimer); }, { once: true, passive: true });
-
-  // ── recalc on resize ──
-  window.addEventListener('resize', () => goTo(current, false));
-})();
-</script>
-
+</div>
 </body>
 </html>
